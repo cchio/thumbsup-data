@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from "react";
+import React from "react";
 import { Modal, useModal } from '@geist-ui/core'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
