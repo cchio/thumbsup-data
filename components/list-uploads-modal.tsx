@@ -4,26 +4,16 @@ import React, { useState } from "react";
 import { Modal, useModal } from '@geist-ui/core'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
-import { FileText } from '@geist-ui/icons'
-import { FileUploader } from "react-drag-drop-files";
-
-const fileTypes = ["TXT", "CSV"];
+import { List } from '@geist-ui/icons'
  
-export default function UploadModal() {
+export default function ListUploadsModal() {
   const { visible, setVisible, bindings } = useModal()
-
-  const [file, setFile] = useState(null)
-
-  const handleChange = (file:any) => {
-    setFile(file);
-  };
  
   return (
     <>
       <Modal {...bindings}>
-        <Modal.Title>Upload CSVs here</Modal.Title>
+        <Modal.Title>Uploaded files</Modal.Title>
         <Modal.Content>
-          <FileUploader handleChange={handleChange} name="file" types={fileTypes} />
         </Modal.Content>
         <Modal.Action passive onClick={() => setVisible(false)}>Cancel</Modal.Action>
         <Modal.Action>Submit</Modal.Action>
@@ -32,9 +22,9 @@ export default function UploadModal() {
         onClick={() => setVisible(true)}
         className={cn(buttonVariants())}
       >
-        <FileText size={16}  className="mr-2" />
-        <span className="hidden sm:block">Upload CSV</span>
-        <span className="sm:hidden">Upload</span>
+        <List size={16} className="mr-2" />
+        <span className="hidden sm:block">List files</span>
+        <span className="sm:hidden">Files</span>
       </a>
     </>
   )

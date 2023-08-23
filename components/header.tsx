@@ -7,12 +7,12 @@ import { clearChats } from '@/app/actions'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Sidebar } from '@/components/sidebar'
 import UploadModal from '@/components/upload-modal'
+import ListUploadsModal from '@/components/list-uploads-modal'
 import { SidebarList } from '@/components/sidebar-list'
 import {
   IconGitHub,
   IconNextChat,
   IconSeparator,
-  IconVercel
 } from '@/components/ui/icons'
 import { SidebarFooter } from '@/components/sidebar-footer'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -60,9 +60,10 @@ export async function Header() {
           className={cn(buttonVariants({ variant: 'outline' }))}
         >
           <IconGitHub />
-          <span className="hidden ml-2 md:flex">GitHub</span>
+          <span className="hidden ml-2 md:flex">Open in GitHub</span>
         </a>
         <UploadModal/>
+        <ListUploadsModal/>
       </div>
     </header>
   )
