@@ -1,25 +1,28 @@
 import * as React from 'react'
 import Link from 'next/link'
 
+import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
 import { clearChats } from '@/app/actions'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Sidebar } from '@/components/sidebar'
+import UploadModal from '@/components/upload-modal'
 import { SidebarList } from '@/components/sidebar-list'
 import {
+  IconGitHub,
   IconNextChat,
   IconSeparator,
+  IconVercel
 } from '@/components/ui/icons'
 import { SidebarFooter } from '@/components/sidebar-footer'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ClearHistory } from '@/components/clear-history'
 import { UserMenu } from '@/components/user-menu'
-import { LoginButton } from '@/components/login-button'
 
 export async function Header() {
   const session = await auth()
   return (
-    <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-gradient-to-b from-background/10 via-background/50 to-background/80 px-4 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 flex items-center justify-between w-full h-16 px-4 border-b shrink-0 bg-gradient-to-b from-background/10 via-background/50 to-background/80 backdrop-blur-xl">
       <div className="flex items-center">
         {session?.user ? (
           <Sidebar>
@@ -34,12 +37,12 @@ export async function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow">
-            <IconNextChat className="mr-2 h-6 w-6 dark:hidden" inverted />
-            <IconNextChat className="mr-2 hidden h-6 w-6 dark:block" />
+            <IconNextChat className="w-6 h-6 mr-2 dark:hidden" inverted />
+            <IconNextChat className="hidden w-6 h-6 mr-2 dark:block" />
           </Link>
         )}
         <div className="flex items-center">
-          <IconSeparator className="h-6 w-6 text-muted-foreground/50" />
+          <IconSeparator className="w-6 h-6 text-muted-foreground/50" />
           {session?.user ? (
             <UserMenu user={session.user} />
           ) : (
@@ -48,6 +51,18 @@ export async function Header() {
             </Button>
           )}
         </div>
+      </div>
+      <div className="flex items-center justify-end space-x-2">
+        <a
+          target="_blank"
+          href="https://github.com/cchio/thumbsup-data"
+          rel="noopener noreferrer"
+          className={cn(buttonVariants({ variant: 'outline' }))}
+        >
+          <IconGitHub />
+          <span className="hidden ml-2 md:flex">GitHub</span>
+        </a>
+        <UploadModal/>
       </div>
     </header>
   )
