@@ -1,5 +1,7 @@
 # KV Store 
 # From https://github.com/bestK/python-vercel-kv/blob/main/src/vercel_kv.py
+# Name prefixed with '_' to tell Vercel not to make it a serverless function.
+
 import os
 import requests
 
