@@ -5,7 +5,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-@app.route("/api/python")
+@app.route("/api/py/python")
 def hello_world():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
