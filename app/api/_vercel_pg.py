@@ -5,7 +5,6 @@ import os
 import psycopg2
 import sys
 
-
 class PG:
 
     def __init__(self):
@@ -14,6 +13,9 @@ class PG:
         user = os.environ.get('POSTGRES_USER')
         password = os.environ.get('POSTGRES_PASSWORD')
         port = os.environ.get('POSTGRES_PORT')
+        if None in [host, dbname, port]:
+            raise Exception("_vercel_pg class missing required env variables.")
+
         self.connection = psycopg2.connect(
             host = host,
             dbname = dbname,

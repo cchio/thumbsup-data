@@ -7,13 +7,8 @@ import requests
 import json
 
 from typing import Optional
-from dotenv import load_dotenv
 from pydantic import BaseModel
 
-
-# Ultra jank. Need to fix
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(BASEDIR, '..', '..', '.env.development.local'))
 
 class KVConfig(BaseModel):
     url: str
@@ -37,13 +32,18 @@ class KV:
 
     def __init__(self, kv_config: Optional[KVConfig] = None):
         if kv_config is None:
+            url = os.environ.get("KV_DB_URL")
+            rest_api_url = os.environ.get("KV_DB_REST_API_URL")
+            rest_api_token = os.environ.get("KV_DB_REST_API_TOKEN")
+            rest_api_read_only_token = os.environ.get("KV_DB_REST_API_READ_ONLY_TOKEN")
+            if None in [url, rest_api_url, rest_api_token, rest_api_read_only_token]:
+                raise Exception("_vercel_kv class missing required env variables.")
+            
             self.kv_config = KVConfig(
-                url=os.getenv("KV_DB_URL"),
-                rest_api_url=os.getenv("KV_DB_REST_API_URL"),
-                rest_api_token=os.getenv("KV_DB_REST_API_TOKEN"),
-                rest_api_read_only_token=os.getenv(
-                    "KV_DB_REST_API_READ_ONLY_TOKEN"
-                ),
+                url=url,
+                rest_api_url=rest_api_url,
+                rest_api_token=rest_api_token,
+                rest_api_read_only_token=rest_api_read_only_token,
             )
         else:
             self.kv_config = kv_config

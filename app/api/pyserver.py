@@ -63,6 +63,7 @@ def add_table():
 
     # Save full dataframe into Postgres DB.
     pg = PG()
+    # print("WRITING TO DB", table_name, df)
     pg.write_df_to_table(table_name, df)
     return "<p>Success!</p>"
 
