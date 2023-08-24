@@ -1,3 +1,5 @@
 flask
 openai
 pandas
+python-dotenv
+pydantic
