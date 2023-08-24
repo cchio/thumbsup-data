@@ -4,6 +4,7 @@
 
 import os
 import requests
+import json
 
 from typing import Optional
 from dotenv import load_dotenv
@@ -69,6 +70,15 @@ class KV:
             url = f'{url}/ex/{opts.ex}'
 
         resp = requests.get(url, headers=headers)
+        return resp.json()['result']
+
+    def set_json(self, key, value) -> bool:
+        headers = {
+            'Authorization': f'Bearer {self.kv_config.rest_api_token}',
+        }
+
+        url = f'{self.kv_config.rest_api_url}/set/{key}'
+        resp = requests.post(url, data=json.dumps(value), headers=headers)
         return resp.json()['result']
 
     def get(self, key) -> bool:
