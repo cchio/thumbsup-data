@@ -7,17 +7,16 @@ import requests
 import json
 
 from typing import Optional
-from pydantic import BaseModel
 
 
-class KVConfig(BaseModel):
+class KVConfig:
     url: str
     rest_api_url: str
     rest_api_token: str
     rest_api_read_only_token: str
 
 
-class Opts(BaseModel):
+class Opts:
     ex: Optional[int]
     px: Optional[int]
     exat: None
@@ -39,16 +38,15 @@ class KV:
             if None in [url, rest_api_url, rest_api_token, rest_api_read_only_token]:
                 raise Exception("_vercel_kv class missing required env variables.")
             
-            self.kv_config = KVConfig(
-                url=url,
-                rest_api_url=rest_api_url,
-                rest_api_token=rest_api_token,
-                rest_api_read_only_token=rest_api_read_only_token,
-            )
+            self.kv_config = KVConfig()
+            self.kv_config.url = url
+            self.kv_config.rest_api_url = rest_api_url
+            self.kv_config.rest_api_token = rest_api_token
+            self.kv_config.rest_api_read_only_token = rest_api_read_only_token
         else:
             self.kv_config = kv_config
 
-    def get_kv_conf(self) -> KVConfig:
+    def get_kv_conf(self):
         return self.kv_config
 
     def has_auth(self) -> bool:
@@ -59,7 +57,7 @@ class KV:
         resp = requests.get(self.kv_config.rest_api_url, headers=headers)
         return resp.json()['error'] != 'Unauthorized'
 
-    def set(self, key, value, opts: Optional[Opts] = None) -> bool:
+    def set(self, key, value, opts = None) -> bool:
         headers = {
             'Authorization': f'Bearer {self.kv_config.rest_api_token}',
         }
