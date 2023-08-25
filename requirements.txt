@@ -1,7 +1,4 @@
 flask
-openai
 pandas
-python-dotenv
-pydantic
 psycopg2-binary
 SQLAlchemy
