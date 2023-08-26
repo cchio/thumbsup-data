@@ -41,7 +41,7 @@ export async function POST(req: Request) {
   // Load file into TableSchema format
   const table = await Table.load(filePath)
   await table.infer() // infer a schema
-  // await table.read({ keyed: true }) // read the data
+  await table.read({ keyed: true }) // read the data
   // await table.schema.save() // save the schema
   // await table.save() // save the data
 
@@ -63,7 +63,7 @@ export async function POST(req: Request) {
   // Save to Postgres.
   // Prepare the create table command
   // const tableColDefs = table.schema.fields.map(f => {
-  //   return `${f.name} ${fieldTypeToPGType(f.type)}`  
+  //   return `${f.name} ${fieldTypeToPGType(f.type)}`
   // })
   // const createTableCmd = `
   // CREATE TABLE ${tableName} (
