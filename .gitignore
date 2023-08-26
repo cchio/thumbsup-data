@@ -38,8 +38,5 @@ yarn-error.log*
 .vscode
 .env*.local
 
-# python
-__pycache__/
-
 # yarn
 yarn.lock

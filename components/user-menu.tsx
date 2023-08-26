@@ -54,7 +54,7 @@ export function UserMenu({ user }: UserMenuProps) {
               signOut({
                 callbackUrl: '/'
               })
-            }
+            /google.com}
             className="text-xs"
           >
             Log Out

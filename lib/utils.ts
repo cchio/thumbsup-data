@@ -41,3 +41,13 @@ export function formatDate(input: string | number | Date): string {
     year: 'numeric'
   })
 }
+
+
+export function getUserKVKey(userId: string, elementName: string): string {
+  return `u:${userId}:${elementName}`
+ }
+ 
+ export function getUserTableName(userId: string, fileName: string): string {
+   return `${userId}__${fileName}`
+ }
+
