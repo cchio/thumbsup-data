@@ -1,10 +1,10 @@
 import { auth } from '@/auth'
 import { getUserKVKey, getUserTableName } from '@/lib/utils'
 import { kv } from '@vercel/kv'
+import { sql } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { sql } from '@vercel/postgres'
 import { Table } from 'tableschema'
 
 export async function POST(req: Request) {
@@ -45,13 +45,9 @@ export async function POST(req: Request) {
   // await table.schema.save() // save the schema
   // await table.save() // save the data
 
-  // Parse csv to insert snippet into KV store.
-  // Expect data to be an array of arrays
   // const tableHead = data.slice(0, 4)
   // const tableName = getUserTableName(userId, fileName)
-  // const tableSnippet = tableHead
-  //   .map((x: Array<string>) => x.join(', '))
-  //   .join('\n')
+  // const tableSnippet = tableHead.map((x: Array<string>) => x.join(', ')).join('\n')
   // const kvKey = getUserKVKey(userId, 'tableSnippets')
 
   // // Update KV store.
@@ -64,11 +60,45 @@ export async function POST(req: Request) {
   // console.log('KV SET', kvKey, updatedTableSnippets)
   // await kv.set(kvKey, updatedTableSnippets)
 
-  // // Save to Postgres.
-  // // await sql`DROP TABLE IF EXISTS ${tableName};`;
-  // // await sql`CREATE TABLE `
-
-  // return updatedTableSnippets
+  // Save to Postgres.
+  // Prepare the create table command
+  // const tableColDefs = table.schema.fields.map(f => {
+  //   return `${f.name} ${fieldTypeToPGType(f.type)}`  
+  // })
+  // const createTableCmd = `
+  // CREATE TABLE ${tableName} (
+  //   ${tableColDefs.join(',\n    ')}
+  // );
+  // `
+  // console.log('PG CREATE CMD', createTableCmd)
+  // const fieldTypeToPGType = (fieldType: string): string => {
+  //   // https://github.com/frictionlessdata/tableschema-js#working-with-field
+  //   switch (fieldType) {
+  //     case 'integer':
+  //       return 'BIGINT'
+  //     case 'year':
+  //       return 'INT'
+  //     case 'number':
+  //       return 'FLOAT8'
+  //     case 'boolean':
+  //       return 'BOOL'
+  //     case 'object':
+  //       return 'JSON'
+  //     case 'date':
+  //       return 'DATE'
+  //     case 'datetime':
+  //       return 'TIMESTAMP'
+  //     default:
+  //       return 'TEXT'
+  //   }
+  // }
+  // await sql`DROP TABLE IF EXISTS ${tableName};`;
+  // await sql`${createTableCmd}`
+  // await sql`COPY ${tableName}(${table.schema.fields.map(f => f.name)})
+  //   FROM 'C:\sampledb\persons.csv'
+  //   DELIMITER ','
+  //   CSV HEADER;
+  // `
 
   return NextResponse.json({ success: true, filename: fileName })
 }
