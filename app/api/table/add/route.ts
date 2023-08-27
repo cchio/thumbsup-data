@@ -5,13 +5,12 @@ import { sql } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { Table } from 'tableschema'
+import pl from 'nodejs-polars'
+
 
 export async function POST(req: Request) {
-  // const json = await req.json()
-  // const { data, fileName } = json
   console.log('Add table payload')
-  // const userId = '345345'
+  const userId = '345345'
   /*
   const userId = (await auth())?.user.id
 
@@ -38,26 +37,25 @@ export async function POST(req: Request) {
     encoding: 'binary'
   })
 
-  // Load file into TableSchema format
-  const table = await Table.load(filePath)
-  await table.infer() // infer a schema
-  await table.read({ keyed: true }) // read the data
-  // await table.schema.save() // save the schema
-  // await table.save() // save the data
+  // Load file into polars dataframe
+  // Important that the filepath have extension ".tsv", ".csv"
+  // or it will think the string is the data.
+  const table = pl.readCSV(filePath)
+  console.log('SCHEMA', table.schema)
 
-  // const tableHead = data.slice(0, 4)
-  // const tableName = getUserTableName(userId, fileName)
-  // const tableSnippet = tableHead.map((x: Array<string>) => x.join(', ')).join('\n')
-  // const kvKey = getUserKVKey(userId, 'tableSnippets')
+  const tableSample = table.sample(5)
+  const tableName = getUserTableName(userId, fileName)
+  const tableSnippet = tableSample.writeCSV()
+  const kvKey = getUserKVKey(userId, 'tableSnippets')
 
-  // // Update KV store.
-  // const tableSnippets = (await kv.get(kvKey)) || {}
-  // console.log('KV GET', kvKey, tableSnippets)
-  // const updatedTableSnippets = {
-  //   ...tableSnippets,
-  //   [tableName]: tableSnippet
-  // }
-  // console.log('KV SET', kvKey, updatedTableSnippets)
+  // Update KV store.
+  const tableSnippets = (await kv.get(kvKey)) || {}
+  console.log('KV GET', kvKey, tableSnippets)
+  const updatedTableSnippets = {
+    ...tableSnippets,
+    [tableName]: tableSnippet
+  }
+  console.log('KV SET', kvKey, updatedTableSnippets)
   // await kv.set(kvKey, updatedTableSnippets)
 
   // Save to Postgres.
