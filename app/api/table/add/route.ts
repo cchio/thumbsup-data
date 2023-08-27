@@ -45,7 +45,7 @@ export async function POST(req: Request) {
 
   const tableSample = table.sample(5)
   const tableName = getUserTableName(userId, fileName)
-  const tableSnippet = tableSample.writeCSV()
+  const tableSnippet = tableSample.writeCSV().toString()
   const kvKey = getUserKVKey(userId, 'tableSnippets')
 
   // Update KV store.
