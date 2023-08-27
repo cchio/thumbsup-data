@@ -20,27 +20,32 @@ export default function UploadModal() {
   };
 
   const handleSubmit = async () => {
-try {
+    if (file !== null) {
       const data = new FormData()
       data.set('file', (file as any))
 
-      const res = await fetch('/api/table/add', {
+      // Send file to server for processing (adding to table)
+      fetch('/api/table/add', {
         method: 'POST',
         body: data
       })
-
-      // Handle errors
-      if (!res.ok) {
-        toast.error(await res.text());
-      }
-    } catch (e: any) {
-      toast.error('Encountered unknown error')
-      console.error(e)
+      .then((res) => res.json())
+      .then((resJson) => {
+        if (resJson.success) {
+          toast.success(`Successfully uploaded ${(file as any).name}`)
+        } else {
+          toast.error(`Upload or processing of ${(file as any).name} failed`)
+        }
+      })
+      .catch((err) => {
+        toast.error('Encountered unknown error')
+        console.error(err)
+      })
     }
 
+    // Reset other state
     setVisible(false);
     handleChange(null);
-    toast.success(`Successfully uploaded ${(file as any).name}`)
   }
  
   return (
@@ -54,7 +59,7 @@ try {
             </p>
         </Modal.Content>
         <Modal.Action passive onClick={ () => setVisible(false) }>Cancel</Modal.Action>
-        <Modal.Action onClick={ () => handleSubmit() }>Submit</Modal.Action>
+        <Modal.Action disabled={ file == null } onClick={ () => handleSubmit()}>Submit</Modal.Action>
       </Modal>
       <a
         onClick={() => {

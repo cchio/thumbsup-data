@@ -100,5 +100,5 @@ export async function POST(req: Request) {
   //   CSV HEADER;
   // `
 
-  return NextResponse.json({ success: true, filename: fileName })
+  return NextResponse.json({ success: true })
 }
