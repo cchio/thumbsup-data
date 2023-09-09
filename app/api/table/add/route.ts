@@ -5,7 +5,7 @@ import { sql } from '@vercel/postgres'
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import pl from 'nodejs-polars'
+import { readCSV, toCSV } from 'danfojs-node'
 
 
 export async function POST(req: Request) {
@@ -40,12 +40,12 @@ export async function POST(req: Request) {
   // Load file into polars dataframe
   // Important that the filepath have extension ".tsv", ".csv"
   // or it will think the string is the data.
-  const table = pl.readCSV(filePath)
-  console.log('SCHEMA', table.schema)
+  const table = await readCSV(filePath)
+  console.log('SCHEMA', table.ctypes)
 
-  const tableSample = table.sample(5)
+  const tableSample = await table.sample(5)
   const tableName = getUserTableName(userId, fileName)
-  const tableSnippet = tableSample.writeCSV().toString()
+  const tableSnippet = toCSV(tableSample)
   const kvKey = getUserKVKey(userId, 'tableSnippets')
 
   // Update KV store.
